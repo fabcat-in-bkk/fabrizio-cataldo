@@ -1,7 +1,8 @@
 # fabriziocataldo.com
 
 Personal site. Static HTML, hand-written CSS, vanilla JS.
-No framework, no build step, no dependencies, no tracking, no analytics.
+No framework, no build step, no dependencies.
+Vercel Web Analytics only: cookieless, no personal data, no cross-site tracking.
 
     index.html      the whole site, self-contained
     cv/index.html   printable, ATS-readable CV
@@ -11,7 +12,7 @@ No framework, no build step, no dependencies, no tracking, no analytics.
 
 Fonts (Archivo variable, Instrument Sans, JetBrains Mono) are subset to the
 glyphs the page uses and embedded as base64, as is the portrait. That is why the
-whole site is one HTTP request.
+page itself is a single HTTP request, plus one deferred analytics script.
 
 Both canvases do their own projection maths in a 2D context: an orthographic dot
 globe with great-circle route arcs in the hero, and a cumulative capability chart
