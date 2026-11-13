@@ -1,111 +1,49 @@
-# How to put this website on the internet
+# How changes go live
 
-You need two things: a Vercel account (free) and about five minutes.
+The site deploys from GitHub. Vercel watches the repository: every push to `main`
+updates fabriziocataldo.com, and every push to any other branch gets its own
+preview URL. There is no build step and no CLI needed.
 
----
+## Make a change safely
 
-## Step 1. Unpack the folder
+1. Start a branch from an up-to-date main:
 
-Download `fabriziocataldo-site.tar.gz` and double click it. You get a folder.
-Rename that folder to `fabriziocataldo` and move it somewhere you will find again,
-for example your Desktop.
+       git checkout main
+       git pull
+       git checkout -b short-description-of-change
 
-Inside you should see:
+2. Edit the files. Open `index.html` in a browser to check the page. The CV view
+   loads `/cv`, which only works when served, so check the CV on the preview URL.
 
-    index.html      the website
-    cv/index.html   the CV page
-    og.png          the preview image for links
-    robots.txt
-    sitemap.xml
-    vercel.json
+3. Commit and push the branch:
 
----
+       git add .
+       git commit -m "What changed"
+       git push -u origin short-description-of-change
 
-## Step 2. Install the Vercel command line tool
+   Vercel builds a preview within a minute. The link shows on the commit in
+   GitHub and under Deployments in the Vercel dashboard. Production is untouched.
 
-Open Terminal (press Cmd+Space, type "Terminal", press Enter) and paste this:
+4. When the preview looks right, merge and push main:
 
-    npm install -g vercel
+       git checkout main
+       git merge short-description-of-change
+       git push
 
-Press Enter. Wait for it to finish.
+   Vercel deploys production automatically.
 
-If it says "npm: command not found", install Node.js first from https://nodejs.org
-(download the LTS version, run the installer, then close Terminal, open it again,
-and run the command above).
+## Undo a bad deploy
 
----
+Vercel dashboard, the `fabriziocataldo` project, Deployments: find the last good
+production deployment, open the three-dot menu and choose Promote to Production.
+That is instant. Then fix or `git revert` the change on main so the next push does
+not bring it back.
 
-## Step 3. Go into the folder
+## Files
 
-In Terminal, type `cd ` (with a space after it), then drag the `fabriziocataldo`
-folder from your Desktop into the Terminal window. It fills in the path for you.
-Press Enter.
-
-To check you are in the right place, type `ls` and press Enter. You should see
-`index.html` in the list.
-
----
-
-## Step 4. Deploy
-
-Type this and press Enter:
-
-    vercel --prod
-
-The first time, it asks you a few questions. Answer them like this:
-
-| Question | Answer |
-|---|---|
-| Set up and deploy? | press Enter for yes |
-| Which scope? | press Enter for your personal account |
-| Link to existing project? | type `n`, press Enter |
-| What's your project's name? | type `fabriziocataldo`, press Enter |
-| In which directory is your code? | press Enter to accept `./` |
-| Want to modify these settings? | type `n`, press Enter |
-
-If it asks you to log in first, it opens your browser. Sign in with GitHub, Google
-or email, then come back to Terminal.
-
-After about twenty seconds it prints a line like:
-
-    Production: https://fabriziocataldo.vercel.app
-
-Open that link. That is your website, live.
-
----
-
-## Step 5. Check it works
-
-Open the link on your phone as well as your laptop. Check:
-
-- the site loads and scrolls
-- "Read the CV" opens the CV
-- add `/cv` to the end of the URL and it loads as its own page
-- "Book a call" opens your calendar
-- the email button opens a new email
-
----
-
-## Step 6. Buy the domain
-
-In your browser go to https://vercel.com/dashboard and click the
-`fabriziocataldo` project.
-
-1. Click **Settings** in the top menu
-2. Click **Domains** in the left sidebar
-3. Type `fabriziocataldo.com` in the box and click **Search** or **Buy**
-4. Pay. It is about $11.25 a year
-5. Vercel connects it automatically
-
-Wait a few minutes, then open https://fabriziocataldo.com
-
----
-
-## Making changes later
-
-Edit the files, then in Terminal go to the folder again and run `vercel --prod`.
-It replaces the live version. There is no build step, so it is always this fast.
-
-If you break something, go to the project in the Vercel dashboard, click
-**Deployments**, find an older one, click the three dots and choose
-**Promote to Production**. That puts the old version back immediately.
+    index.html      the site
+    cv/index.html   the CV page, and the single source for the CV view on the site
+    og.png          link preview image, 1200x630
+    robots.txt, sitemap.xml
+    vercel.json     clean URLs and security headers
+    _planning/      local planning notes, gitignored, never published
